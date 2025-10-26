@@ -6,48 +6,49 @@
 <title>Boolean Network • Two Simulators + Attractor Analysis</title>
 <style>
   :root { --bg:#0b0f14; --panel:#111826; --muted:#AAB4C1; --on:#33d17a; --off:#0f1624; --pos:#2E75B6; --neg:#C00000; --grid:#1f2a3a; }
-  *{box-sizing:border-box;font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Inter,Arial}
-  body{margin:0;background:var(--bg);color:#e6edf3}
-  header{padding:14px 18px;border-bottom:1px solid #1f2a3a;background:#0d1420;display:flex;gap:12px;align-items:center;justify-content:space-between}
-  header .title{font-weight:700;letter-spacing:.2px}
-  header .subtitle{color:var(--muted);font-size:12px}
-  .wrap{display:grid;grid-template-columns:540px 1fr;gap:14px;padding:14px}
-  .wrap.two{grid-template-columns:1fr}
-  .card{background:var(--panel);border:1px solid #192235;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.25)}
-  .pad{padding:14px}
-  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-  .btn{background:#182236;border:1px solid #26334a;padding:8px 12px;border-radius:10px;color:#e6edf3;cursor:pointer}
-  .btn:hover{background:#1d2a42}
-  .btn.primary{background:#23365a;border-color:#2f4b7d}
-  input[type=number],select{background:#0f1624;border:1px solid #26334a;color:#e6edf3;border-radius:10px;padding:6px 8px}
-  .toggle{display:inline-flex;align-items:center;gap:6px;margin-right:10px}
-  .toggle input{accent-color:#4aa5ff}
-  .grid{overflow:auto;border-top:1px solid #1f2a3a}
-  .matrix{display:grid;gap:2px;padding:10px}
-  .cell{width:30px;height:22px;border-radius:6px;border:1px solid #1f2a3a;background:var(--off);display:flex;align-items:center;justify-content:center;font-size:11px;color:#9fb2c8}
-  .cell.on{background:var(--on);color:#0b1b12;border-color:#0f4d2f}
-  .labels{display:grid;gap:2px;padding:10px;padding-right:0}
-  .label{height:22px;display:flex;align-items:center;justify-content:flex-end;color:#a9b6c7;font-size:12px;padding-right:6px}
-  .columns{display:flex;align-items:center;gap:8px;color:#aab4c1;padding:6px 10px 10px 10px}
-  svg text{font-size:12px;fill:#d8e0ea}
-  /* Bigger, clearer arrows */
-  .edge-pos{stroke:var(--pos);stroke-width:2.6;fill:none;stroke-linecap:round}
-  .edge-neg{stroke:var(--neg);stroke-width:2.6;fill:none;stroke-linecap:round}
-  .node{fill:#101c2a;stroke:#2c3e55;stroke-width:1.2}
-  .code{font-family:ui-monospace,monospace;background:#0c121c;border:1px solid #1b2434;padding:12px;border-radius:10px;white-space:pre-wrap;font-size:12px;margin-top:8px}
-  table{border-collapse:collapse;width:100%}
-  th,td{border:1px solid #26334a;padding:6px 8px;text-align:center;font-size:13px}
-  th{background:#0f1626}
-  .app-title{font-weight:700;margin:0 0 10px 0}
+	*{box-sizing:border-box;font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Inter,Arial}
+	body{margin:0;background:var(--bg);color:#e6edf3}
+	header{padding:14px 18px;border-bottom:1px solid #1f2a3a;background:#0d1420;display:flex;gap:12px;align-items:center;justify-content:space-between}
+	header .title{font-weight:700;letter-spacing:.2px}
+	header .subtitle{color:var(--muted);font-size:12px}
+	.wrap{display:grid;grid-template-columns:540px 1fr;gap:14px;padding:14px}
+	.card{background:var(--panel);border:1px solid #192235;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.25)}
+	.pad{padding:14px}
+	.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+	.btn{background:#182236;border:1px solid #26334a;padding:8px 12px;border-radius:10px;color:#e6edf3;cursor:pointer}
+	.btn:hover{background:#1d2a42}
+	.btn.primary{background:#23365a;border-color:#2f4b7d}
+	input[type=number],select{background:#0f1624;border:1px solid #26334a;color:#e6edf3;border-radius:10px;padding:6px 8px}
+	.toggle{display:inline-flex;align-items:center;gap:6px;margin-right:10px}
+	.toggle input{accent-color:#4aa5ff}
+	.grid{overflow:auto;border-top:1px solid #1f2a3a}
+	.matrix{display:grid;gap:2px;padding:10px}
+	.cell{width:30px;height:22px;border-radius:6px;border:1px solid #1f2a3a;background:var(--off);display:flex;align-items:center;justify-content:center;font-size:11px;color:#9fb2c8}
+	.cell.on{background:var(--on);color:#0b1b12;border-color:#0f4d2f}
+	.labels{display:grid;gap:2px;padding:10px;padding-right:0}
+	.label{height:22px;display:flex;align-items:center;justify-content:flex-end;color:#a9b6c7;font-size:12px;padding-right:6px}
+	.columns{display:flex;align-items:center;gap:8px;color:#aab4c1;padding:6px 10px 10px 10px}
+	svg text{font-size:12px;fill:#d8e0ea}
+	.edge-pos{stroke:var(--pos);stroke-width:2.6;fill:none}
+	.edge-neg{stroke:var(--neg);stroke-width:2.6;fill:none}
+	.node{fill:#101c2a;stroke:#2c3e55;stroke-width:1.5}
+	.code{font-family:ui-monospace,monospace;background:#0c121c;border:1px solid #1b2434;padding:12px;border-radius:10px;white-space:pre-wrap;font-size:12px;margin-top:8px}
+	table{border-collapse:collapse;width:100%}
+	th,td{border:1px solid #26334a;padding:6px 8px;text-align:center;font-size:13px}
+	th{background:#0f1626}
 </style>
 </head>
 <body>
   <header>
-    <div>
-      <div class="title">Boolean Networks — Side-by-side Comparison</div>
-      <div class="subtitle">Both simulators include directional diagrams, time-matrix, and A/B bias analysis for D random / ON / OFF.</div>
-    </div>
-    <div style="display:flex;gap:12px;align-items:center"><span style="color:var(--pos)">■</span> activation <span style="color:var(--neg)">■</span> inhibition</div>
+	<div>
+		<div class="title">Boolean Network — Trading Analogy: Benefit (1) vs Non-benefit (0)</div>
+		<div class="subtitle">Each node represents a trading hub or supplier. A '1' state means the hub gains benefit (e.g., successful trade or resource flow), and '0' means no benefit. The network simulates how interdependencies affect trade sustainability under latency-like dynamics.</div>
+	</div>
+	<div style="display:flex;gap:12px;align-items:center"><span style="color:var(--pos)">■</span> activation <span style="color:var(--neg)">■</span> inhibition</div>
+	</header>
+	<div style="padding:14px;color:#aab4c1;font-size:14px;max-width:1000px;line-height:1.5">
+		This model can be interpreted as a <b>trading or sourcing network</b> — each node (A–E) acts as a participant whose success (benefit) depends on upstream suppliers or partners. Positive (activation) links mean mutual trade advantage, while negative (inhibition) links could represent supply conflicts, competition, or bottlenecks. The dynamics simulate how information latency or dependence affects when the system as a whole reaches a stable “economic” attractor.
+	</div>
   </header>
 
   <!-- APP 1 -->
@@ -229,7 +230,16 @@
       function sign(u,v){ const r=spec.rules.find(rr=>rr.lhs===v); const term=r.terms.find(t=>t.v===u); return term? term.s:+1; }
 
       // edges from rules (no labels)
-      for(const r of spec.rules){ for(const term of r.terms){ const u=term.v, v=r.lhs; if(u==='randD') continue; const curved = (u==='A'&&v==='B')? -26 : (u==='B'&&v==='A')? -18 : (u==='E'&&v==='B')? -10 : 0; edge(u,v, sign(u,v), curved); } }
+      for(const r of spec.rules){ for(const term of r.terms){ const u=term.v, v=r.lhs; if(u==='randD') continue; function curveFor(u,v){
+        // Curves for overlapping/ambiguous edges
+        if(u==='A'&&v==='B') return -26;      // top arc A→B
+        if(u==='B'&&v==='A') return -18;      // top arc B→A
+        if(u==='E'&&v==='B') return -10;      // diagonal E→B
+        if(u==='C'&&v==='E') return 12;       // chord along bottom (separate from C→D→E)
+        return 0;
+      }
+      const curved = curveFor(u,v);
+      edge(u,v, sign(u,v), curved); } }
 
       // nodes
       for(const n of NODES){ const [x,y]=pos[n]; const g=el('g'); const c=el('circle'); c.setAttribute('cx',x); c.setAttribute('cy',y); c.setAttribute('r',NODE_R); c.setAttribute('class','node'); const t=el('text'); t.setAttribute('x',x); t.setAttribute('y',y+4); t.setAttribute('text-anchor','middle'); t.textContent=n; g.appendChild(c); g.appendChild(t); svg.appendChild(g); }
@@ -282,7 +292,7 @@
       'D(t+1) = C(t)',
       'E(t+1) = D(t) ∨ C(t)'
     ],
-    layout:{A:[90,100], B:[450,100], C:[200,210], D:[300,210], E:[390,210]},
+    layout:{A:[60,80], B:[420,80], C:[170,140], D:[270,200], E:[360,140]},
     init:{A:1,B:0,C:0,D:0,E:0}
   };
 
@@ -295,7 +305,7 @@
       {lhs:'F', terms:[{v:'C', s:+1}]}, // F = C
       {lhs:'D', terms:[{v:'F', s:+1}]}, // D = F
       {lhs:'G', terms:[{v:'D', s:+1},{v:'F', s:+1}], op:'OR'}, // G = D ∨ F
-      {lhs:'E', terms:[{v:'F', s:+1},{v:'C', s:+1}], op:'OR'} // E = F ∨ C
+      {lhs:'E', terms:[{v:'G', s:+1},{v:'C', s:+1}], op:'OR'} // E = F ∨ C
     ],
     textRules:[
       'A(t+1) = B(t)',
@@ -306,7 +316,7 @@
       'G(t+1) = D(t) ∨ F(t)',
       'E(t+1) = F(t) ∨ C(t)'
     ],
-    layout:{A:[100,90], B:[700,90], C:[200,220], F:[300,220], D:[400,220], G:[500,220], E:[600,220]},
+    layout: {A:[60,80], B:[420,80], C:[170,140], F: [220,200], D: [270,240], G: [310,200], E:[360,140]},
     init:{A:1,B:0,C:0,F:0,D:0,G:0,E:0}
   };
 
